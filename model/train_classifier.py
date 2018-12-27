@@ -160,7 +160,7 @@ def perform_random_grid_search(pipeline, parameters, X_train, y_train):
     print("available parameters")
     
     n_iter_search = 20
-    grid_search = RandomizedSearchCV(pipeline, param_grid=parameters, n_iter=n_iter_search, cv=5, verbose=5)
+    grid_search = RandomizedSearchCV(pipeline, param_distributions=parameters, n_iter=n_iter_search, cv=5, verbose=5)
     
     t0 = time()
     grid_search.fit(X_train, y_train)
@@ -208,7 +208,6 @@ def tune_model(pipeline, x_train, y_train, grid_search):
         'textpipeline__vect__max_features': (None, 5000, 10000),
         'textpipeline__tfidf__use_idf': (True, False),
         'clf__estimator__n_estimators': [50, 100, 200],
-         'clf__estimator__min_samples_split': [2, 3, 4],
         'clf__estimator__max_depth' : [5,7,10]
        
     }
@@ -253,7 +252,7 @@ def main():
         print('Trained model saved!')
 
         print('Tuning Model')
-        best_model = tune_model(model, X_train, Y_train, False)
+        best_model = tune_model(model, X_train, Y_train, True)
 
         save_model(best_model, 'best_estimator.pkl')
 
