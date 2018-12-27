@@ -43,14 +43,15 @@ def clean_columns(df):
         
          #Iterate through the category columns in df to keep only the last character of each string (the 1 or 0). 
         # For example, related-0 becomes 0, related-1 becomes 1. Convert the string to a numeric value.
-    for column in df:
-        #do we need to trim white space
-        # set each value to be the last character of the string
-        df[column] = (df[column]).astype(str)
-        df[column] = df[column].str[-1:]
-        # convert column from string to numeric
-        df[column] = (df[column]).astype(int)
-    return df
+        for column in df:
+            #do we need to trim white space
+            # set each value to be the last character of the string
+            df[column] = (df[column]).astype(str)
+            df[column] = df[column].str[-1:]
+            # convert column from string to numeric
+            df[column] = (df[column]).astype(int)
+
+        return df
 
 def split_column_into_seperate_columns(df, column_to_split, delimiter):
       """
