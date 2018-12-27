@@ -114,7 +114,7 @@ def clean_data(df):
 
 def save_data(df, database_filename, table_name):
     """
-    Save the dataframe to an sql lite database table
+    Save the dataframe to an sqllite database table
     Data is appended to the named database table if it already exists
     Input: df : pandas dataframe, 
     database_filename: name of database file to save too
@@ -122,10 +122,22 @@ def save_data(df, database_filename, table_name):
     Output: None
     """
     engine = create_engine("sqlite:///" + database_filename)
-    df.to_sql(table_name, engine, index=False) 
+    #this has been set to replace to enable repeated running of script
+    #with the same dataset. this would need to be updated to 'append' to
+    # use with regular updates of data 
+    df.to_sql(table_name, engine, index=False, if_exists='replace') 
 
 def clean_database(database_filename):
+    """
+    Helper function to clean sql lite database between running of script
+    Added to allow rerunning of script
+    Do not call in production environment
+    Input: name of database file
+    """
+    engine = create_engine("sqlite:///" + database_filename)
     sql = text('DROP TABLE IF EXISTS Categories;')
+    result = engine.execute(sql)
+    sql = text('DROP TABLE IF EXISTS Messages;')
     result = engine.execute(sql)
 
 
