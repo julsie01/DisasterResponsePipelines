@@ -5,6 +5,7 @@ import sqlite3
 import sys
 from time import time
 
+
 import pandas as pd
 import xgboost as xgb
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -70,7 +71,7 @@ def build_xgboost_pipeline():
     Create a multioutput classifer with an XGBoost Classifier
     """
     #default number of estimators is 100
-    classifier = MultiOutputClassifier(xgb.XGBClassifier(max_depth=5, reg_alpha=0.01, scale_pos_weight = 1))
+    classifier = MultiOutputClassifier(xgb.XGBClassifier(max_depth=5, reg_alpha=0.01, scale_pos_weight = 1, nthread=-1, random_state=40, njobs=4))
     return classifier   
 
 def build_classifier_pipeline(selected_classifier):
@@ -231,17 +232,22 @@ def save_model(model, model_filepath):
 
 
 def main():
-    if len(sys.argv) == 3:
-        database_filepath, model_filepath = sys.argv[1:]
+    if len(sys.argv) == 4:
+        database_filepath, model_filepath, run_model_tuning = sys.argv[1:]
+        print(run_model_tuning)
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
         
+        t0 = time()
         print('Building model...')
         model = build_model()
+        print("done in %0.3fs" % (time() - t0))
         
+        t0 = time()
         print('Training model...')
         model.fit(X_train, Y_train)
+        print("done in %0.3fs" % (time() - t0))
         
         print('Evaluating model...')
         evaluate_model(model, X_test, Y_test, category_names)
@@ -251,16 +257,16 @@ def main():
 
         print('Trained model saved!')
 
-        print('Tuning Model')
-        best_model = tune_model(model, X_train, Y_train, False)
-
-        save_model(best_model, 'best_estimator.pkl')
+        if run_model_tuning == '1':
+            print('Tuning Model')
+            best_model = tune_model(model, X_train, Y_train, True)
+            save_model(best_model, model_filepath)
 
     else:
         print('Please provide the filepath of the disaster messages database '\
               'as the first argument and the filepath of the pickle file to '\
-              'save the model to as the second argument. \n\nExample: python '\
-              'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
+              'save the model to as the second argument. And a 1 or 0 to switch on grid search \n\nExample: python '\
+              'train_classifier.py ../data/DisasterResponse.db classifier.pkl 0')
 
 
 if __name__ == '__main__':
