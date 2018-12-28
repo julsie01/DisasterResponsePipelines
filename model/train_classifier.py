@@ -5,6 +5,7 @@ import sqlite3
 import sys
 from time import time
 
+
 import pandas as pd
 import xgboost as xgb
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -238,11 +239,15 @@ def main():
         X, Y, category_names = load_data(database_filepath)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
         
+        t0 = time()
         print('Building model...')
         model = build_model()
+        print("done in %0.3fs" % (time() - t0))
         
+        t0 = time()
         print('Training model...')
         model.fit(X_train, Y_train)
+        print("done in %0.3fs" % (time() - t0))
         
         print('Evaluating model...')
         evaluate_model(model, X_test, Y_test, category_names)
