@@ -62,16 +62,22 @@ def build_randomforest_pipeline():
     """
     Create a multioutput classifer with a Random Forest Classifier
     """
-    classifier = MultiOutputClassifier(RandomForestClassifier(n_estimators=10, random_state=1))
+    print("Build Random Forest Classifer")
+    rf_model = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=1, class_weight="balanced", n_jobs=-1)
+    print(rf_model)
+    classifier = MultiOutputClassifier(rf_model)
     return classifier
 
-#could change this function to take a model that gets wrappedin a multioutput classifier
+
 def build_xgboost_pipeline():
     """
     Create a multioutput classifer with an XGBoost Classifier
     """
     #default number of estimators is 100
-    classifier = MultiOutputClassifier(xgb.XGBClassifier(max_depth=5, reg_alpha=0.01, scale_pos_weight = 1, nthread=-1, random_state=40, njobs=4))
+    print("Build XGBoost Classifer")
+    xgb_model = xgb.XGBClassifier(max_depth=5, reg_alpha=0.01, scale_pos_weight = 1, nthread=-1, random_state=40, njobs=16)
+    print(xgb_model)
+    classifier = MultiOutputClassifier(xgb_model)
     return classifier   
 
 def build_classifier_pipeline(selected_classifier):
@@ -105,7 +111,8 @@ def build_model():
     """
     featurespipeline =build_text_features_pipeline()
     #modelpipeline = build_classifier_pipeline(RandomForestClassifier(n_estimators=10, random_state=1))
-    modelpipeline = build_xgboost_pipeline()
+    #modelpipeline = build_xgboost_pipeline()
+    modelpipeline = build_randomforest_pipeline()
 
     pipeline = Pipeline([
             
@@ -129,7 +136,7 @@ def perform_grid_search(pipeline, parameters, X_train, y_train):
     print(parameters)
     print("available parameters")
     
-    grid_search = GridSearchCV(pipeline, param_grid=parameters, verbose=5, cv=5)
+    grid_search = GridSearchCV(pipeline, param_grid=parameters, verbose=10, cv=5, n_jobs=-1)
     
     t0 = time()
     grid_search.fit(X_train, y_train)
@@ -198,10 +205,9 @@ def tune_model(pipeline, x_train, y_train, grid_search):
     Output: the model with the best score from the grid search
     """
     #small subset of parameters for testing code as grid search is long running
-    mini_parameters = {
-        'textpipeline__vect__ngram_range': ((1, 1), (1, 2)),
-        'textpipeline__tfidf__use_idf': (True, False),
-        'clf__estimator__n_estimators': [50, 100, 200]
+    model_parameters = {
+        'clf__estimator__n_estimators': [50, 100, 200],
+        'clf__estimator__max_depth' : [5,7,10]
     }
     parameters = {
         'textpipeline__vect__ngram_range': ((1, 1), (1, 2)),
@@ -213,8 +219,10 @@ def tune_model(pipeline, x_train, y_train, grid_search):
        
     }
 
+    #model parameters have been used on the grid search for speed in this case
+    #full search including text pipeline parameters would take approx 5 hours on EC2 Instance
     if (grid_search):
-        best_estimator = perform_grid_search(pipeline, parameters, x_train, y_train)
+        best_estimator = perform_grid_search(pipeline, model_parameters, x_train, y_train)
     else:
         best_estimator = perform_random_grid_search(pipeline, parameters, x_train, y_train)
     
@@ -248,12 +256,14 @@ def main():
         print('Training model...')
         model.fit(X_train, Y_train)
         print("done in %0.3fs" % (time() - t0))
+
+        print('Saving model...\n    MODEL: {}'.format(model_filepath))
+        save_model(model, model_filepath)
         
         print('Evaluating model...')
         evaluate_model(model, X_test, Y_test, category_names)
 
-        print('Saving model...\n    MODEL: {}'.format(model_filepath))
-        save_model(model, model_filepath)
+      
 
         print('Trained model saved!')
 
