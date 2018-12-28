@@ -50,21 +50,21 @@ python -m nltk.downloader wordnet <br>
 python -m nltk.downloader punkt <br>
 
 
-Files Included:
+<H4> Files Included: </H4>
 
-Data Cleaning
+<H5>Data Cleaning</H5>
 
 data_process folder contains a script to load data from csv files and transfer into an sql lite database.
 
-Text Processing
+<H5>Text Processing</H5>
 
 text_process folder contains a package to tokenie, stem and lemmatise text.
 
-Model Training and Evaluation
+<H5>Model Training and Evaluation</H5>
 
 model folder contains scripts to run a text processing pipeline (using the text_process package) and train a multi output classifer
 
-Web App
+<H5>Web App</H5>
 
 app folder contains a small flask web application that allows a user to imput a message and it is classified into the relevant categories by the trained model.  
 
