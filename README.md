@@ -35,10 +35,12 @@ install text package for use with the machine learning script <br>
 pip install -e text_process
 
 If using conda <br>
+
 conda install pip <br>
 conda env create --name disasterresponseenv -f=environment/environment.yml -v <br>
 conda activate disasterresponseenv <br>
-#install text package for use with the machine learning script <br>
+
+install text package for use with the machine learning script <br>
 pip install -e text_process
 
 download nltk packages <br>
