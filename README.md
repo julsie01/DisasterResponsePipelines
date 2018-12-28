@@ -63,7 +63,7 @@ python model/train_classifier.py data/DisasterResponse.db models/classifier.pkl 
 <h5>To Run the flask web app: <br></h5>
 move to the app directory <br>
      cd app     <br>
-Run the following command in the app's directory to run your web app. <br>
+Run the following command. <br>
     python run.py <br>
 
 Go to http://0.0.0.0:3001/ <br>
