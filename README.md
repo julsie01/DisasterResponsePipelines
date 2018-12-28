@@ -1,6 +1,6 @@
 # Disaster Response Pipelines Project
 
-Motivation
+Motivation : This project was completed as part of the Udacity Data Science NanoDegree
 
 
 <h3> Installation : </h3>
@@ -10,7 +10,7 @@ git clone https://github.com/julsie01/DisasterResponsePipelines.git
 <h4> Libraries Used </h4>
 
 The project is built with python 3.6 using the following libraries
-SQl Alchemy, Scikit-learn, sqllite, pandas, nltk, regex, flask, plotly
+SQl Alchemy, Scikit-learn, XGBoost, sqllite, pandas, nltk, regex, flask, plotly
 
 If installing manually in a conda environment then the following commands can be used
 
@@ -23,6 +23,7 @@ conda install nltk <br>
 conda install regex <br>
 conda install flask <br>
 conda install plotly <br>
+conda install py-xgboost <br>
 
 To Install from requirements file: <br>
 
@@ -37,7 +38,7 @@ pip install -e text_process
 If using conda <br>
 
 conda install pip <br>
-conda env create --name disasterresponseenv -f=environment/environment.yml -v <br>
+conda env create --name disasterresponseenv -f=requirements/requirements.txt -v <br>
 conda activate disasterresponseenv <br>
 
 install text package for use with the machine learning script <br>
@@ -47,6 +48,25 @@ download nltk packages <br>
 python -m nltk.downloader stopwords <br>
 python -m nltk.downloader wordnet <br>
 python -m nltk.downloader punkt <br>
+
+
+Files Included:
+
+Data Cleaning
+
+data_process folder contains a script to load data from csv files and transfer into an sql lite database.
+
+Text Processing
+
+text_process folder contains a package to tokenie, stem and lemmatise text.
+
+Model Training and Evaluation
+
+model folder contains scripts to run a text processing pipeline (using the text_process package) and train a multi output classifer
+
+Web App
+
+app folder contains a small flask web application that allows a user to imput a message and it is classified into the relevant categories by the trained model.  
 
 #The following instructions assume that you are in the DisasterResponsePipelines Directory
 
