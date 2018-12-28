@@ -1,4 +1,4 @@
-# DisasterResponsePipelines
+# Disaster Response Pipelines Project
 
 Motivation
 
