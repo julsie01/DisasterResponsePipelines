@@ -60,7 +60,7 @@ If you want to run the grid search then change the 0 to 1 <br>
 python model/train_classifier.py data/DisasterResponse.db models/classifier.pkl 0
 
 <br>
-To Run the flask web app: <br>
+<h5>To Run the flask web app: <br></h5>
 move to the app directory <br>
      cd app     <br>
 Run the following command in the app's directory to run your web app. <br>
