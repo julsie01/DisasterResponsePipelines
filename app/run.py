@@ -34,11 +34,12 @@ def load_messages():
 
 def load_model():
     """Helper Function to Load the pretrained model from disk"""
-    global model
+    #global model
     model = joblib.load(app.config['MODEL_PATH'])
+    return model
 
 df = load_messages()
-load_model()
+model = load_model()
 
 
 # index webpage displays cool visuals and receives user input text for model
