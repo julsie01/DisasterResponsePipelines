@@ -66,7 +66,7 @@ model folder contains scripts to run a text processing pipeline (using the text_
 
 <H5>Web App</H5>
 
-app folder contains a small flask web application that allows a user to imput a message and it is classified into the relevant categories by the trained model.  
+app folder contains a small flask web application that allows a user to input a message and it is classified into the relevant categories by the trained model.  
 
 #The following instructions assume that you are in the DisasterResponsePipelines Directory
 
