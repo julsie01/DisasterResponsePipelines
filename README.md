@@ -2,6 +2,12 @@
 
 Motivation : This project was completed as part of the Udacity Data Science NanoDegree
 
+Background: The data is sourced from Figure8
+The dataset contains 30,000 messages from disaster events in multiple languages, encoded with 36 different categories. 
+
+more detail here : https://www.figure-eight.com/dataset/combined-disaster-response-data/
+
+Outcome: The aim of this project was to build a simple web application that could take a message and assign categories in order to suggest which forms of aid are required. 
 
 <h3> Installation : </h3>
 
